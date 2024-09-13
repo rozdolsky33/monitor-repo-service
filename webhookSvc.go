@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 )
 
@@ -13,8 +14,16 @@ type PushEvent struct {
 	Ref string `json:"ref"`
 }
 
-func gitPullV2(repoDir string) error {
-	cmd := exec.Command("git", "-C", repoDir, "pull")
+func gitPull(repoDir string) error {
+	token := os.Getenv("GIT_PAT")
+	if token == "" {
+		return fmt.Errorf("GIT_PAT environment variable not set")
+	}
+
+	repoURL := fmt.Sprintf("https://%s@github.com/rozdolsky33/monitor-repo-service.git", token)
+
+	cmd := exec.Command("git", "-C", repoDir, "pull", repoURL)
+
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("error pulling from git: %v - %s", err, string(output))
@@ -23,14 +32,12 @@ func gitPullV2(repoDir string) error {
 	return nil
 }
 
-// Run the script and capture its output
 func runScript(scriptPath string) error {
 	cmd := exec.Command("/bin/sh", scriptPath)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("error executing script: %v - %s", err, string(output))
 	}
-	// Log the output of the script
 	log.Printf("Script output: %s", string(output))
 	return nil
 }
@@ -61,7 +68,7 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 		// Pull the latest changes from the repository
 		repoDir := "/root/monitor-repo-service"
 		scriptPath := "/root/monitor-repo-service/upload.sh"
-		if err := gitPullV2(repoDir); err != nil {
+		if err := gitPull(repoDir); err != nil {
 			log.Printf("Error pulling from git: %v", err)
 			http.Error(w, "Failed to pull from git", http.StatusInternalServerError)
 			return

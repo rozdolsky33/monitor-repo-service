@@ -3,12 +3,12 @@ Description=GitHub Monitor Service
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/monitor
-WorkingDirectory=/path/to/your/local/repo
+ExecStart=/root/monitor-repo-service/monitor-repo-service
+WorkingDirectory=/root/monitor-repo-service
 Restart=on-failure
-User=youruser
-Group=yourgroup
-Environment=GITHUB_API_TOKEN=your_github_token
+User=root
+Group=root
+Environment=GIT_PAT=
 
 [Install]
 WantedBy=multi-user.target
