@@ -1,0 +1,14 @@
+[Unit]
+Description=GitHub Monitor Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/monitor
+WorkingDirectory=/path/to/your/local/repo
+Restart=on-failure
+User=youruser
+Group=yourgroup
+Environment=GITHUB_API_TOKEN=your_github_token
+
+[Install]
+WantedBy=multi-user.target
