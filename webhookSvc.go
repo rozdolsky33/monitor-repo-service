@@ -13,6 +13,7 @@ type PushEvent struct {
 	Ref string `json:"ref"`
 }
 
+//TEST
 func gitPullV2(repoDir string) error {
 	cmd := exec.Command("git", "-C", repoDir, "pull")
 	output, err := cmd.CombinedOutput()
