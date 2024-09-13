@@ -13,7 +13,7 @@ type PushEvent struct {
 	Ref string `json:"ref"`
 }
 
-//TEST
+// TEST
 func gitPullV2(repoDir string) error {
 	cmd := exec.Command("git", "-C", repoDir, "pull")
 	output, err := cmd.CombinedOutput()
@@ -49,7 +49,7 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 
 		// Pull the latest changes from the repository
 		repoDir := "/root/monitor-repo-service"
-		scriptPath := "~/monitoring-repo-service/upload.sh"
+		scriptPath := "/root/monitoring-repo-service/upload.sh"
 		if err := gitPullV2(repoDir); err != nil {
 			log.Printf("Error pulling from git: %v", err)
 			http.Error(w, "Failed to pull from git", http.StatusInternalServerError)
