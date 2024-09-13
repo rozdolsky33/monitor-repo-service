@@ -47,7 +47,7 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 		log.Println("Push event detected on main branch!")
 
 		// Pull the latest changes from the repository
-		repoDir := "~/monitoring-repo-service"
+		repoDir := "/root/monitor-repo-service"
 		scriptPath := "~/monitoring-repo-service/upload.sh"
 		if err := gitPullV2(repoDir); err != nil {
 			log.Printf("Error pulling from git: %v", err)
