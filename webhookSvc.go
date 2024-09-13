@@ -43,7 +43,6 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check if the event is a push to the main branch
 	if event.Ref == "refs/heads/main" {
 		log.Println("Push event detected on main branch!")
 
