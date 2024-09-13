@@ -56,7 +56,6 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Execute your custom script
 		err := exec.Command("/bin/sh", scriptPath).Run()
 		if err != nil {
 			log.Printf("Error executing script: %v", err)
