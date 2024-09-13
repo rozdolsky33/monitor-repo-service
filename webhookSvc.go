@@ -23,6 +23,18 @@ func gitPullV2(repoDir string) error {
 	return nil
 }
 
+// Run the script and capture its output
+func runScript(scriptPath string) error {
+	cmd := exec.Command("/bin/sh", scriptPath)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("error executing script: %v - %s", err, string(output))
+	}
+	// Log the output of the script
+	log.Printf("Script output: %s", string(output))
+	return nil
+}
+
 func handleWebhook(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
@@ -55,8 +67,8 @@ func handleWebhook(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err := exec.Command("/bin/sh", scriptPath).Run()
-		if err != nil {
+		// Run the script and capture its output
+		if err := runScript(scriptPath); err != nil {
 			log.Printf("Error executing script: %v", err)
 			http.Error(w, "Failed to execute script", http.StatusInternalServerError)
 			return
